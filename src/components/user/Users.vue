@@ -48,7 +48,7 @@
                 icon="el-icon-delete"
                 circle
                 size="mini"
-                @click="showEditDialog(scope.row.id)"
+                @click="removeUserById(scope.row.id)"
               ></el-button>
               <!--分配角色按钮-->
               <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
@@ -279,10 +279,33 @@ export default {
         if (res.meta.status !== 200) {
           return this.$message.error("更新用户信息失败！");
         }
-        this.editDialogVisible=false
-        this.getUserList()
-        this.$message.success('更新用户信息成功')
+        this.editDialogVisible = false;
+        this.getUserList();
+        this.$message.success("更新用户信息成功");
       });
+    },
+    //根据Id删除对应的用户信息
+    async removeUserById(id) {
+      //弹窗询问是否删除用户
+      const confirmResult = await this.$confirm(
+        "此操作将永久删除该用户, 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        }
+      ).catch((err) => err);
+      //如果用户确认删除
+      if (confirmResult !== "confirm") {
+        return this.$message.info("已取消删除");
+      }
+      const { data: res } = await this.$http.delete("users/" + id);
+      if (res.meta.status !== 200) {
+        return this.$message.error("删除用户失败!");
+      }
+      this.$message.success("删除成功!");
+      this.getUserList();
     },
   },
 };
