@@ -30,7 +30,7 @@ Vue.config.productionTip = false
 Vue.component('tree-table',TreeTable)
 Vue.use(VueQuillEditor)
 
-Vue.filter('dataFormat',(originVal)=> {
+Vue.filter('dateFormat',(originVal)=> {
   const dt=new Date(originVal)
   const y=dt.getFullYear()
   const m=(dt.getMonth()+1+'').padStart(2,'0')
